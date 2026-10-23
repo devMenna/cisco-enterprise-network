@@ -83,5 +83,3 @@ cisco-enterprise-network/
 - `show ip nat translations` — Inspected real-time PAT translation sessions under active traffic.
 - `show access-lists` — Audited packet match counters for Guest VLAN policy enforcement.
 - `show ntp status` & `show clock` — Verified synchronized time across all network nodes.
-
-```
