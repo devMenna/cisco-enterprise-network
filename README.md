@@ -85,5 +85,3 @@ cisco-enterprise-network/
 - `show ntp status` & `show clock` — Verified synchronized time across all network nodes.
 
 ```
-
-```
