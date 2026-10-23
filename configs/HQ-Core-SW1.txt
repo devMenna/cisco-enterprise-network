@@ -1,0 +1,225 @@
+Current configuration : 3924 bytes
+!
+version 12.2(37)SE1
+service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname HQ-Core-SW
+!
+!
+no profinet
+!
+!
+ip dhcp excluded-address 10.10.10.1 10.10.10.10
+ip dhcp excluded-address 10.10.20.1 10.10.20.10
+ip dhcp excluded-address 10.10.30.1 10.10.30.10
+ip dhcp excluded-address 10.10.40.0 10.10.40.10
+!
+ip dhcp pool POOL10
+ network 10.10.10.0 255.255.255.0
+ default-router 10.10.10.1
+ dns-server 203.0.113.10
+ip dhcp pool POOL20
+ network 10.10.20.0 255.255.255.0
+ default-router 10.10.20.1
+ dns-server 203.0.113.10
+ip dhcp pool POOL30
+ network 10.10.30.0 255.255.255.0
+ default-router 10.10.30.1
+ dns-server 203.0.113.10
+ip dhcp pool POOL40
+ network 10.10.40.0 255.255.255.0
+ default-router 10.10.40.1
+ dns-server 203.0.113.10
+!
+!
+aaa new-model
+!
+aaa authentication login default group radius local 
+!
+!
+!
+!
+clock timezone CET 1
+!
+!
+!
+ip routing
+!
+!
+!
+!
+username admin secret 5 $1$mERr$RldxcCZEZsTFTETUyRaA50
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip ssh version 2
+ip domain-name hq.local
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree vlan 10-30 priority 24576
+!
+!
+!
+!
+!
+!
+interface Loopback1
+ ip address 1.1.1.1 255.255.255.255
+!
+interface Port-channel1
+ switchport trunk allowed vlan 10,20,30
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Port-channel2
+ switchport trunk allowed vlan 10,20,30
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface FastEthernet0/1
+ switchport trunk allowed vlan 10,20,30
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 2 mode active
+!
+interface FastEthernet0/2
+ switchport trunk allowed vlan 10,20,30
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 2 mode active
+!
+interface FastEthernet0/3
+!
+interface FastEthernet0/4
+!
+interface FastEthernet0/5
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+ switchport access vlan 10
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+ switchport access vlan 20
+!
+interface FastEthernet0/21
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+!
+interface FastEthernet0/24
+ no switchport
+ ip address 10.10.100.1 255.255.255.252
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ switchport trunk allowed vlan 10,20,30
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 1 mode active
+!
+interface GigabitEthernet0/2
+ switchport trunk allowed vlan 10,20,30
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-group 1 mode active
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan10
+ mac-address 00d0.5894.0001
+ ip address 10.10.10.2 255.255.255.0
+ standby 10 ip 10.10.10.1
+ standby 10 priority 110
+ standby 10 preempt
+!
+interface Vlan20
+ mac-address 00d0.5894.0002
+ ip address 10.10.20.2 255.255.255.0
+ standby 20 ip 10.10.20.1
+ standby 20 priority 110
+ standby 20 preempt
+!
+interface Vlan30
+ mac-address 00d0.5894.0003
+ ip address 10.10.30.2 255.255.255.0
+ standby 30 ip 10.10.30.1
+ standby 30 priority 110
+ standby 30 preempt
+!
+router ospf 1
+ router-id 1.1.1.1
+ log-adjacency-changes
+ passive-interface Loopback1
+ network 10.10.100.0 0.0.0.3 area 0
+ network 10.10.20.0 0.0.0.255 area 0
+ network 10.10.30.0 0.0.0.255 area 0
+ network 10.10.10.0 0.0.0.255 area 0
+!
+ip classless
+!
+ip flow-export version 9
+!
+!
+ip access-list extended deny-guest
+ deny ip 10.10.30.0 0.0.0.255 10.10.0.0 0.0.255.255
+ permit ip any any
+!
+!
+radius-server host 10.10.10.5 auth-port 1645 key secret
+!
+!
+!
+!
+logging 10.10.10.5
+line con 0
+!
+line aux 0
+!
+line vty 0 4
+ transport input ssh
+line vty 5 15
+!
+!
+!
+ntp server 10.10.10.5
+!
+end
